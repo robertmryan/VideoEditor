@@ -7,15 +7,21 @@
 
 import UIKit
 
-class Canvas: UIView {
-    public var strokeColor: UIColor = .black
-    private var strokeWidth: Float = 10
-    public var isDrawable: Bool = false
-    private var lines: [Line] = []
+class CanvasView: UIView {
+    private let viewModel = CanvasViewModel()
+
+    override init(frame: CGRect = .zero) {
+        super.init(frame: frame)
+        isUserInteractionEnabled = true
+    }
+
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
 
     override func draw(_ rect: CGRect) {
         super.draw(rect)
-        if isDrawable {
+        if viewModel.isDrawable {
             draw()
         }
     }
@@ -23,62 +29,50 @@ class Canvas: UIView {
 
 // MARK: - Public interface
 
-extension Canvas {
+extension CanvasView {
     func undo() {
-        _ = lines.popLast()
+        viewModel.undo()
         setNeedsDisplay()
     }
 
     func undoAll() {
-        lines.removeAll()
+        viewModel.undoAll()
         setNeedsDisplay()
     }
 
     func changeWidth(width: Float) {
-        strokeWidth = width
+        viewModel.strokeWidth = width
         setNeedsDisplay()
     }
 }
 
 // MARK: - Private interface
 
-private extension Canvas {
+private extension CanvasView {
     func draw() {
-        guard let context = UIGraphicsGetCurrentContext() else { return }
+        viewModel.lines.forEach { line in
+            let path = line.simplePath
+            path.lineJoinStyle = .round
+            path.lineCapStyle = .round
+            path.lineWidth = CGFloat(line.strokeWidth)
 
-        lines.forEach { line in
-            context.setStrokeColor(line.color.cgColor)
-            context.setLineWidth(CGFloat(line.strokeWidth))
-            context.setLineCap(.round)
-            for (index, point) in line.points.enumerated() {
-                if index == 0 {
-                    context.move(to: point)
-                } else {
-                    context.addLine(to: point)
-                }
-            }
-            context.strokePath()
+            line.color.setStroke()
+
+            path.stroke()
         }
     }
 }
 
 // MARK: - Touches
 
-extension Canvas {
+extension CanvasView {
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
-        lines.append(Line(strokeWidth: strokeWidth, color: strokeColor, points: [], drawable: isDrawable))
+        viewModel.startNewLine(point: touches.first?.location(in: self))
+        setNeedsDisplay()
     }
 
     override func touchesMoved(_ touches: Set<UITouch>, with event: UIEvent?) {
-        guard
-            isDrawable,
-            let point = touches.first?.location(in: nil),
-            var lastLine = lines.popLast()
-        else { return }
-
-        lastLine.points.append(point)
-        lines.append(lastLine)
-        print(point)
+        viewModel.appendToLastLine(touches.first?.location(in: self))
         setNeedsDisplay()
     }
 }

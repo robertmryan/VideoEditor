@@ -9,7 +9,7 @@ import UIKit
 import SnapKit
 
 @objc class VideoEditorViewController: UIViewController {
-    let canvas = Canvas()
+    let canvas = CanvasView()
     let picker = UIColorPickerViewController()
 
     override func viewDidLoad() {
