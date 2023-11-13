@@ -8,28 +8,42 @@
 import UIKit
 
 class Canvas: UIView {
-
     public var strokeColor: UIColor = .black
     private var strokeWidth: Float = 10
     public var isDrawable: Bool = false
-    private var lines = [Line]()
+    private var lines: [Line] = []
 
-    public func undo() {
+    override func draw(_ rect: CGRect) {
+        super.draw(rect)
+        if isDrawable {
+            draw()
+        }
+    }
+}
+
+// MARK: - Public interface
+
+extension Canvas {
+    func undo() {
         _ = lines.popLast()
         setNeedsDisplay()
     }
 
-    public func undoAll() {
+    func undoAll() {
         lines.removeAll()
         setNeedsDisplay()
     }
 
-    public func changeWidth(width: Float) {
+    func changeWidth(width: Float) {
         strokeWidth = width
         setNeedsDisplay()
     }
+}
 
-    public func draw() {
+// MARK: - Private interface
+
+private extension Canvas {
+    func draw() {
         guard let context = UIGraphicsGetCurrentContext() else { return }
 
         lines.forEach { line in
@@ -46,14 +60,11 @@ class Canvas: UIView {
             context.strokePath()
         }
     }
+}
 
-    override func draw(_ rect: CGRect) {
-        super.draw(rect)
-        if isDrawable {
-            draw()
-        }
-    }
+// MARK: - Touches
 
+extension Canvas {
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         lines.append(Line(strokeWidth: strokeWidth, color: strokeColor, points: [], drawable: isDrawable))
     }
