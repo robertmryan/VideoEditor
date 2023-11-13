@@ -34,6 +34,7 @@
 		C48396802B02AD7F00FC150E /* Line.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Line.swift; sourceTree = "<group>"; };
 		C48396822B02ADA300FC150E /* CanvasButtonsViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CanvasButtonsViewModel.swift; sourceTree = "<group>"; };
 		C48396842B02ADC300FC150E /* CanvasModelButtonModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CanvasModelButtonModel.swift; sourceTree = "<group>"; };
+		C48969FA2B02B5B300A0D068 /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -52,6 +53,7 @@
 		C483965E2B02AD3100FC150E = {
 			isa = PBXGroup;
 			children = (
+				C48969FA2B02B5B300A0D068 /* README.md */,
 				C48396692B02AD3100FC150E /* VideoEditor */,
 				C48396682B02AD3100FC150E /* Products */,
 			);
@@ -70,8 +72,8 @@
 			children = (
 				C48969F92B02AED100A0D068 /* App lifecycle */,
 				C48396872B02ADE900FC150E /* View */,
-				C48396862B02ADD700FC150E /* Model */,
 				C48969F82B02AEB900A0D068 /* ViewModel */,
+				C48396862B02ADD700FC150E /* Model */,
 				C48396702B02AD3100FC150E /* Main.storyboard */,
 				C48396732B02AD3300FC150E /* Assets.xcassets */,
 				C48396752B02AD3300FC150E /* LaunchScreen.storyboard */,

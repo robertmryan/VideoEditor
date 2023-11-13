@@ -8,7 +8,6 @@
 import UIKit
 
 final class CanvasButtonsViewModel: UIButton {
-
     let image: UIImageView = {
         let image = UIImageView()
         image.image = UIImage()
@@ -24,14 +23,17 @@ final class CanvasButtonsViewModel: UIButton {
     override init(frame: CGRect) {
         super.init(frame: frame)
     }
+
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
+
     func configure(with viewModel: CanvasModelButtonModel) {
-        self.addSubview(image)
+        addSubview(image)
         image.image = viewModel.image
         image.frame = CGRect(x: 0, y: 0, width: viewModel.width, height: viewModel.height)
     }
+
     override func layoutSubviews() {
         super.layoutSubviews()
     }
