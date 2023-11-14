@@ -8,24 +8,28 @@
 import UIKit
 
 final class CanvasButton: UIButton {
-    let image: UIImageView = {
-        let image = UIImageView()
-        image.image = UIImage()
-        image.image?.withTintColor(.white, renderingMode: .alwaysOriginal)
-        return image
-    }()
-}
+    private var action: (CanvasButton) -> Void
 
-// MARK: - Public interface
+    init(size: CGSize = .zero, image: UIImage?, action: @escaping (CanvasButton) -> Void) {
+        self.action = action
 
-extension CanvasButton {
-    func setConfig(size: CGFloat) -> UIImage.SymbolConfiguration {
-        UIImage.SymbolConfiguration(pointSize: size, weight: .bold, scale: .large)
+        super.init(frame: CGRect(origin: .zero, size: size))
+        snp.makeConstraints { make in
+            make.width.equalTo(size.width)
+            make.height.equalTo(size.height)
+        }
+        setImage(
+            image?.withTintColor(.white, renderingMode: .alwaysOriginal),
+            for: .normal
+        )
+        addTarget(self, action: #selector(handleTap(_:)), for: .touchUpInside)
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
     }
 
-    func configure(with viewModel: CanvasModelButtonModel) {
-        addSubview(image)
-        image.image = viewModel.image
-        image.frame = CGRect(x: 0, y: 0, width: viewModel.width, height: viewModel.height)
+    @objc func handleTap(_ sender: CanvasButton) {
+        action(sender)
     }
 }

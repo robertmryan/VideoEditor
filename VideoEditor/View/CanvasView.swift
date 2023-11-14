@@ -8,7 +8,10 @@
 import UIKit
 
 class CanvasView: UIView {
-    private let viewModel = CanvasViewModel()
+    var lines: [Line] = [] { didSet { setNeedsDisplay() } }
+
+    var onStartGesture: ((CGPoint?) -> Void)?
+    var onContinueGesture: (([CGPoint]) -> Void)?
 
     override init(frame: CGRect = .zero) {
         super.init(frame: frame)
@@ -21,45 +24,19 @@ class CanvasView: UIView {
 
     override func draw(_ rect: CGRect) {
         super.draw(rect)
-        if viewModel.isDrawable {
-            draw()
-        }
-    }
-}
 
-// MARK: - Public interface
+        lines
+            .filter { $0.drawable }
+            .forEach { line in
+                let path = line.simplePath
+                path.lineJoinStyle = .round
+                path.lineCapStyle = .round
+                path.lineWidth = CGFloat(line.strokeWidth)
 
-extension CanvasView {
-    func undo() {
-        viewModel.undo()
-        setNeedsDisplay()
-    }
+                line.color.setStroke()
 
-    func undoAll() {
-        viewModel.undoAll()
-        setNeedsDisplay()
-    }
-
-    func changeWidth(width: Float) {
-        viewModel.strokeWidth = width
-        setNeedsDisplay()
-    }
-}
-
-// MARK: - Private interface
-
-private extension CanvasView {
-    func draw() {
-        viewModel.lines.forEach { line in
-            let path = line.simplePath
-            path.lineJoinStyle = .round
-            path.lineCapStyle = .round
-            path.lineWidth = CGFloat(line.strokeWidth)
-
-            line.color.setStroke()
-
-            path.stroke()
-        }
+                path.stroke()
+            }
     }
 }
 
@@ -67,12 +44,16 @@ private extension CanvasView {
 
 extension CanvasView {
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
-        viewModel.startNewLine(point: touches.first?.location(in: self))
-        setNeedsDisplay()
+        onStartGesture?(touches.first?.location(in: self))
     }
 
     override func touchesMoved(_ touches: Set<UITouch>, with event: UIEvent?) {
-        viewModel.appendToLastLine(touches.first?.location(in: self))
-        setNeedsDisplay()
+        guard let touch = touches.first else { return }
+
+        if let touches = event?.coalescedTouches(for: touch) {
+            onContinueGesture?(touches.compactMap { $0.location(in: self) })
+        } else if let point = touches.first?.location(in: self) {
+            onContinueGesture?([point])
+        }
     }
 }

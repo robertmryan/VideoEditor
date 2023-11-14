@@ -8,9 +8,10 @@
 import UIKit
 import SnapKit
 
-@objc class VideoEditorViewController: UIViewController {
-    let canvas = CanvasView()
-    let picker = UIColorPickerViewController()
+class VideoEditorViewController: UIViewController {
+    private let viewModel = VideoEditorViewModel()
+    private let canvas = CanvasView()
+    private let picker = UIColorPickerViewController()
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -25,71 +26,58 @@ private extension VideoEditorViewController {
         view.addSubview(canvas)
         canvas.backgroundColor = .clear
 
-        let undoButton = CanvasButton(frame: .zero)
-        undoButton.configure(
-            with: CanvasModelButtonModel(
-                image: UIImage(systemName: "arrowshape.turn.up.left.fill")?
-                    .withTintColor(.white, renderingMode: .alwaysOriginal),
-                width: 50,
-                height: 50,
-                backgroundColor: .white
-            )
-        )
-        undoButton.addTarget(self, action: #selector(handleUndo(_:)), for: .touchUpInside)
+        bindViewModelToUpdateCanvas()
+        bindCanvasToUpdateViewModel()
+        addButtons()
+    }
 
-        let colorPicker = CanvasButton(frame: .zero)
-        colorPicker.configure(
-            with: CanvasModelButtonModel(
-                image: UIImage(systemName: "pencil.circle")?
-                    .withTintColor(.white, renderingMode: .alwaysOriginal),
-                width: 50,
-                height: 50,
-                backgroundColor: .white
-            )
-        )
-        colorPicker.addTarget(self, action: #selector(colorPicker(_:)), for: .touchUpInside)
+    func bindViewModelToUpdateCanvas() {
+        viewModel.onUpdateDrawing = { [weak self] lines in
+            self?.canvas.lines = lines
+        }
+    }
 
-        let trashCanButton = CanvasButton(frame: .zero)
-        trashCanButton.configure(
-            with: CanvasModelButtonModel(
-                image: UIImage(systemName: "trash")?
-                    .withTintColor(.white, renderingMode: .alwaysOriginal),
-                width: 50,
-                height: 50,
-                backgroundColor: .white
-            )
-        )
-        trashCanButton.addTarget(self, action: #selector(handleClear(_:)), for: .touchUpInside)
+    func bindCanvasToUpdateViewModel() {
+        canvas.onStartGesture = { [weak self] point in
+            self?.viewModel.startNewLine(point: point)
+        }
 
-        let uploadViewButton = CanvasButton(frame: .zero)
-        uploadViewButton.configure(
-            with: CanvasModelButtonModel(
-                image: UIImage(systemName: "envelope")?
-                    .withTintColor(.white, renderingMode: .alwaysOriginal),
-                width: 51,
-                height: 48,
-                backgroundColor: .white
-            )
-        )
+        canvas.onContinueGesture = { [weak self] points in
+            self?.viewModel.appendToLastLine(points)
+        }
+    }
 
-        let test = CanvasButton(frame: .zero)
-        test.configure(
-            with: CanvasModelButtonModel(
-                image: UIImage(systemName: "pencil.circle")?
-                    .withTintColor(.white, renderingMode: .alwaysOriginal),
-                width: 51,
-                height: 48,
-                backgroundColor: .white
-            )
-        )
-        test.addTarget(self, action: #selector(testDraw(_:)), for: .touchUpInside)
+    func addButtons() {
+        let size = CGSize(width: 50, height: 50)
+
+        let undoButton = CanvasButton(size: size, image: UIImage(systemName: "arrowshape.turn.up.left.fill")) { [weak self] _ in
+            self?.viewModel.undo()
+        }
+
+        let colorPicker = CanvasButton(size: size, image: UIImage(systemName: "paintpalette.fill")) { [weak self] _ in
+            guard let self else { return }
+            picker.delegate = self
+            present(picker, animated: true)
+        }
+
+        let trashCanButton = CanvasButton(size: size, image: UIImage(systemName: "trash")) { [weak self] _ in
+            self?.viewModel.undoAll()
+        }
+
+        let uploadViewButton = CanvasButton(size: size, image: UIImage(systemName: "envelope")) { _ in // [weak self]
+            print("upload not implemented")
+        }
+
+        let toggleDrawing = CanvasButton(size: size, image: UIImage(systemName: "pencil.circle")) { [weak self] _ in
+            self?.viewModel.isDrawable.toggle()
+        }
 
         let stackView = UIStackView(arrangedSubviews: [
             undoButton,
             trashCanButton,
             colorPicker,
             uploadViewButton,
-            test
+            toggleDrawing
         ])
         view.addSubview(stackView)
 
@@ -104,31 +92,10 @@ private extension VideoEditorViewController {
     }
 }
 
-// MARK: - Actions
-
-extension VideoEditorViewController {
-    @objc func handleUndo(_ sender: Any) {
-        canvas.undo()
-    }
-
-    @objc func handleClear(_ sender: Any) {
-        canvas.undoAll()
-    }
-
-    @objc func colorPicker(_ sender: Any) {
-        picker.delegate = self
-        present(picker, animated: true)
-    }
-    
-    @objc func testDraw(_ sender: Any) {
-        canvas.isDrawable.toggle()
-    }
-}
-
 // MARK: - UIColorPickerViewControllerDelegate
 
 extension VideoEditorViewController: UIColorPickerViewControllerDelegate {
     func colorPickerViewController(_ viewController: UIColorPickerViewController, didSelect color: UIColor, continuously: Bool) {
-        canvas.strokeColor = picker.selectedColor
+        viewModel.strokeColor = picker.selectedColor
     }
 }

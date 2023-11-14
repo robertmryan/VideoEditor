@@ -17,10 +17,9 @@
 		C483967F2B02AD6400FC150E /* CanvasView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C483967E2B02AD6400FC150E /* CanvasView.swift */; };
 		C48396812B02AD7F00FC150E /* Line.swift in Sources */ = {isa = PBXBuildFile; fileRef = C48396802B02AD7F00FC150E /* Line.swift */; };
 		C48396832B02ADA300FC150E /* CanvasButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = C48396822B02ADA300FC150E /* CanvasButton.swift */; };
-		C48396852B02ADC300FC150E /* CanvasModelButtonModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C48396842B02ADC300FC150E /* CanvasModelButtonModel.swift */; };
 		C48969F52B02AE9F00A0D068 /* SnapKit in Frameworks */ = {isa = PBXBuildFile; productRef = C48969F42B02AE9F00A0D068 /* SnapKit */; };
 		C48969F72B02AE9F00A0D068 /* SnapKit-Dynamic in Frameworks */ = {isa = PBXBuildFile; productRef = C48969F62B02AE9F00A0D068 /* SnapKit-Dynamic */; };
-		C48969FC2B02C1D900A0D068 /* CanvasViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C48969FB2B02C1D900A0D068 /* CanvasViewModel.swift */; };
+		C48969FC2B02C1D900A0D068 /* VideoEditorViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C48969FB2B02C1D900A0D068 /* VideoEditorViewModel.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -36,9 +35,8 @@
 		C483967E2B02AD6400FC150E /* CanvasView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CanvasView.swift; sourceTree = "<group>"; };
 		C48396802B02AD7F00FC150E /* Line.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Line.swift; sourceTree = "<group>"; };
 		C48396822B02ADA300FC150E /* CanvasButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CanvasButton.swift; sourceTree = "<group>"; };
-		C48396842B02ADC300FC150E /* CanvasModelButtonModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CanvasModelButtonModel.swift; sourceTree = "<group>"; };
 		C48969FA2B02B5B300A0D068 /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
-		C48969FB2B02C1D900A0D068 /* CanvasViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CanvasViewModel.swift; sourceTree = "<group>"; };
+		C48969FB2B02C1D900A0D068 /* VideoEditorViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VideoEditorViewModel.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -99,7 +97,6 @@
 			isa = PBXGroup;
 			children = (
 				C48396802B02AD7F00FC150E /* Line.swift */,
-				C48396842B02ADC300FC150E /* CanvasModelButtonModel.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -117,7 +114,7 @@
 		C48969F82B02AEB900A0D068 /* ViewModel */ = {
 			isa = PBXGroup;
 			children = (
-				C48969FB2B02C1D900A0D068 /* CanvasViewModel.swift */,
+				C48969FB2B02C1D900A0D068 /* VideoEditorViewModel.swift */,
 			);
 			path = ViewModel;
 			sourceTree = "<group>";
@@ -210,10 +207,9 @@
 			buildActionMask = 2147483647;
 			files = (
 				C47C4A2E2B02CE4500262FC8 /* Line+Path.swift in Sources */,
-				C48969FC2B02C1D900A0D068 /* CanvasViewModel.swift in Sources */,
+				C48969FC2B02C1D900A0D068 /* VideoEditorViewModel.swift in Sources */,
 				C48396832B02ADA300FC150E /* CanvasButton.swift in Sources */,
 				C483966F2B02AD3100FC150E /* VideoEditorViewController.swift in Sources */,
-				C48396852B02ADC300FC150E /* CanvasModelButtonModel.swift in Sources */,
 				C483966B2B02AD3100FC150E /* AppDelegate.swift in Sources */,
 				C483967F2B02AD6400FC150E /* CanvasView.swift in Sources */,
 				C483966D2B02AD3100FC150E /* SceneDelegate.swift in Sources */,
