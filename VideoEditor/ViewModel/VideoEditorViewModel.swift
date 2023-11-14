@@ -8,9 +8,9 @@
 import UIKit
 
 class VideoEditorViewModel {
-    var strokeColor: UIColor = .blue
-    var strokeWidth: Float = 10
-    var isDrawable: Bool = true
+    private var strokeColor: UIColor = .blue
+    private var strokeWidth: Float = 10
+    private var isDrawable: Bool = true
     private(set) var lines: [Line] = [] { didSet { onUpdateDrawing?(lines) } }
     var onUpdateDrawing: (([Line]) -> Void)?
 }
@@ -25,7 +25,7 @@ extension VideoEditorViewModel {
         lines.removeAll()
     }
 
-    func startNewLine(point: CGPoint?) {
+    func startNewLine(at point: CGPoint?) {
         let line = Line(
             strokeWidth: strokeWidth,
             color: strokeColor,
@@ -42,5 +42,13 @@ extension VideoEditorViewModel {
         if index >= 0 {
             lines[index].points.append(contentsOf: points)
         }
+    }
+
+    func toggleDrawable() {
+        isDrawable.toggle()
+    }
+
+    func setStrokeColor(to color: UIColor) {
+        strokeColor = color
     }
 }

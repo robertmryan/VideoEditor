@@ -6,7 +6,6 @@
 //
 
 import UIKit
-import SnapKit
 
 class VideoEditorViewController: UIViewController {
     private let viewModel = VideoEditorViewModel()
@@ -39,7 +38,7 @@ private extension VideoEditorViewController {
 
     func bindCanvasToUpdateViewModel() {
         canvas.onStartGesture = { [weak self] point in
-            self?.viewModel.startNewLine(point: point)
+            self?.viewModel.startNewLine(at: point)
         }
 
         canvas.onContinueGesture = { [weak self] points in
@@ -69,7 +68,7 @@ private extension VideoEditorViewController {
         }
 
         let toggleDrawing = CanvasButton(size: size, image: UIImage(systemName: "pencil.circle")) { [weak self] _ in
-            self?.viewModel.isDrawable.toggle()
+            self?.viewModel.toggleDrawable()
         }
 
         let stackView = UIStackView(arrangedSubviews: [
@@ -84,10 +83,11 @@ private extension VideoEditorViewController {
         stackView.axis = .vertical
         stackView.bringSubviewToFront(view)
         stackView.spacing = 30
-        stackView.snp.makeConstraints { make in
-            make.right.equalTo(view.snp_rightMargin).offset(-20)
-            make.top.equalTo(view.snp_topMargin)
-        }
+        stackView.translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.activate([
+            stackView.rightAnchor.constraint(equalTo: view.rightAnchor, constant: -20),
+            stackView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor)
+        ])
         canvas.frame = view.frame
     }
 }
@@ -96,6 +96,6 @@ private extension VideoEditorViewController {
 
 extension VideoEditorViewController: UIColorPickerViewControllerDelegate {
     func colorPickerViewController(_ viewController: UIColorPickerViewController, didSelect color: UIColor, continuously: Bool) {
-        viewModel.strokeColor = picker.selectedColor
+        viewModel.setStrokeColor(to: picker.selectedColor)
     }
 }

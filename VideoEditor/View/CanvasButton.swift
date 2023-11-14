@@ -14,14 +14,18 @@ final class CanvasButton: UIButton {
         self.action = action
 
         super.init(frame: CGRect(origin: .zero, size: size))
-        snp.makeConstraints { make in
-            make.width.equalTo(size.width)
-            make.height.equalTo(size.height)
-        }
+
+        translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.activate([
+            widthAnchor.constraint(equalToConstant: size.width),
+            heightAnchor.constraint(equalToConstant: size.height)
+        ])
+
         setImage(
             image?.withTintColor(.white, renderingMode: .alwaysOriginal),
             for: .normal
         )
+
         addTarget(self, action: #selector(handleTap(_:)), for: .touchUpInside)
     }
     
