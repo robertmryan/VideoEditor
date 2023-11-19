@@ -88,7 +88,8 @@ private extension VideoEditorViewController {
             stackView.rightAnchor.constraint(equalTo: view.rightAnchor, constant: -20),
             stackView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor)
         ])
-        canvas.frame = view.frame
+
+        canvas.frame = view.bounds
     }
 }
 
